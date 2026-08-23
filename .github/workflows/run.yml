@@ -1,7 +1,11 @@
 name: Run Toto Tracker
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 依然保留手动触发按钮
+  schedule:
+    # 转换为 UTC 时间：马本地时间晚 20:30 (UTC 12:30)
+    # 每周三、周六、周日自动执行
+    - cron: '30 12 * * 3,6,0'
 
 jobs:
   run-script:
