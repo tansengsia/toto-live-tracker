@@ -34,11 +34,8 @@ def fetch_real_toto_results():
     print("🔄 正在实时解析 Sports Toto 官方最新开奖...")
     print("==================================================\n")
 
-    # 使用专门解析 4D 官方结果的开放 API 接口
     url = "https://api.4d88.link/v1/latest?provider=toto"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
     try:
         res = requests.get(url, headers=headers, timeout=12)
@@ -77,10 +74,7 @@ def fetch_real_toto_results():
     except Exception as e:
         print(f"⚠️ 动态接口获取提示: {e}")
 
-    # 如果接口临时响应慢，直接请求备用抓取源
     print("🔄 正在通过备用官方源抓取...")
-    output_text = """📊 Sports Toto 23/8 (周日) 最新官方开奖数据拉取完成"""
-    print(output_text)
 
 if __name__ == "__main__":
     fetch_real_toto_results()
