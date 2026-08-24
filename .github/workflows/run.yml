@@ -1,10 +1,8 @@
 name: Run Toto Tracker
 
 on:
-  workflow_dispatch: # 依然保留手动触发按钮
+  workflow_dispatch:
   schedule:
-    # 转换为 UTC 时间：马本地时间晚 20:30 (UTC 12:30)
-    # 每周三、周六、周日自动执行
     - cron: '30 12 * * 3,6,0'
 
 jobs:
@@ -20,7 +18,11 @@ jobs:
           python-version: '3.10'
 
       - name: Install Dependencies
-        run: pip install requests
+        run: pip install requests beautifulsoup4
 
-      - name: Run Script
+      - name: Run Script & Send Email
+        env:
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
         run: python main.py
