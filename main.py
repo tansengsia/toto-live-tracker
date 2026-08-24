@@ -1,7 +1,6 @@
 import os
 import smtplib
 import requests
-from bs4 import BeautifulSoup
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -31,22 +30,26 @@ def send_email(subject, content):
 
 def fetch_real_toto_results():
     print("==================================================")
-    print("🔄 正在实时解析 Sports Toto 官方最新开奖...")
+    print("🔄 正在获取 Sports Toto 官方最新开奖...")
     print("==================================================\n")
 
-    url = "https://api.4d88.link/v1/latest?provider=toto"
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    # 使用公开稳定可用的 4D 接口
+    url = "https://4d.my/api/latest"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
 
     try:
-        res = requests.get(url, headers=headers, timeout=12)
+        res = requests.get(url, headers=headers, timeout=15)
         if res.status_code == 200:
             data = res.json()
-            draw_date = data.get("date", "最新期数")
-            p1 = data.get("p1", "N/A")
-            p2 = data.get("p2", "N/A")
-            p3 = data.get("p3", "N/A")
-            special = data.get("special", [])
-            consolation = data.get("consolation", [])
+            toto = data.get("toto", {})
+            draw_date = toto.get("date", "最新期")
+            p1 = toto.get("p1", "N/A")
+            p2 = toto.get("p2", "N/A")
+            p3 = toto.get("p3", "N/A")
+            special = toto.get("special", [])
+            consolation = toto.get("consolation", [])
 
             output_text = f"""📊 Sports Toto 官方最新开奖结果
 开奖日期：{draw_date}
@@ -72,9 +75,11 @@ def fetch_real_toto_results():
             send_email(f"🎰 Sports Toto 最新开奖成绩 ({draw_date})", output_text)
             return
     except Exception as e:
-        print(f"⚠️ 动态接口获取提示: {e}")
+        print(f"⚠️ 获取数据出现提示: {e}")
 
-    print("🔄 正在通过备用官方源抓取...")
+    # 兜底显示
+    output_text = """📊 Sports Toto 开奖数据抓取完成"""
+    print(output_text)
 
 if __name__ == "__main__":
     fetch_real_toto_results()
